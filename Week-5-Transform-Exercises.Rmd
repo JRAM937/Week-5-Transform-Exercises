@@ -1,6 +1,6 @@
 ---
 title: "Transform Data"
-output: html_notebook
+output: github_document
 ---
 
 
@@ -19,7 +19,7 @@ library(babynames)
 Alter the code to select just the `n` column:
 
 ```{r}
-select(babynames, name, prop)
+select(babynames, n)
 ```
 
 ## Quiz
@@ -41,7 +41,8 @@ Use `filter`, `babynames`, and the logical operators to find:
 * All of the children named "Sea"  
 
 ```{r}
-
+filter(babynames, prop >= 0.08)
+filter(babynames, name == "Sea")
 
 ```
 
@@ -54,7 +55,9 @@ Use Boolean operators to return only the rows that contain:
 * Names that are one of Acura, Lexus, or Yugo
 
 ```{r}
-
+filter(babynames, sex == "M", name == "Sue")
+filter(babynames, n == 5 | n == 6, year == "1880")
+filter(babynames, name %in% c("Acura", "Lexus", "Yugo"))
 ```
 
 ## Help Me
@@ -63,7 +66,8 @@ What is the smallest value of n?
 What is the largest?
 
 ```{r}
-
+arrange(babynames, desc(n)) #Largest is 99686
+arrange(babynames, n) #Smallest is 5
 ```
 
 ## Your Turn 4
@@ -75,7 +79,8 @@ Use `%>%` to write a sequence of functions that:
 3. Arranges the results so that the most popular names are near the top.
 
 ```{r}
-
+girls_2017 <- babynames %>% filter(sex == "F", year == "2017") %>% select(name, n) %>% arrange(desc(n))
+#Emma was the most popular female name in 2017, with 19738 children given the name!
 ```
 
 ## Your Turn 5
@@ -85,8 +90,13 @@ Use `%>%` to write a sequence of functions that:
 3. Plot the results as a line graph with `year` on the x axis and `prop` on the y axis
 
 ```{r}
-
-
+babynames %>% 
+  filter(sex == "M", name == "Juan") %>% 
+  select(year, prop) %>% 
+  ggplot(aes(x = year, y = prop)) +
+  geom_line(color = "cyan", size = 1.12) +
+  labs(title = "Popularity of the name 'Juan'", x = "Year", y = "Proportion of Males born") +
+  theme_dark()
 ```
 
 ***
